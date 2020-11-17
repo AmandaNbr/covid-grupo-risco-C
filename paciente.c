@@ -5,13 +5,7 @@
 
 //void registrarPaciente();
 void pegaNome(char nome[100]);
-char nome[100];
-char cpf[13];
-char telefone[9];
-int dataDeNascimento[3];
-char email[50];
-int dataDiagnostico[3];
-char comorbidade[50];
+
 
 struct Endereco {
     char rua[50];
@@ -22,14 +16,21 @@ struct Endereco {
     char cep[10];
 };
 
-struct Endereco *novoEndereco;
+
 
 void registrarPaciente()
 {
     char desejaCadastrar;
+    char nome[100];
+    char cpf[13];
+    char telefone[9];
+    int dataDeNascimento[3];
+    char email[50];
+    int dataDiagnostico[3];
+    char comorbidade[50];
+    struct Endereco *novoEndereco;
 
     do{
-
         novoEndereco = (struct Endereco*) malloc(sizeof(struct Endereco));
         printf("\nInforme os dados do paciente.\n");
 
@@ -43,37 +44,39 @@ void registrarPaciente()
         pegaTelefone(telefone);
 
         printf("DATA DE NASCIMENTO------------\n");
-        pegaData(dataDeNascimento);
+        pegaDataDeNascimento(dataDeNascimento);
 
         printf("E-mail:\n");
         pegaEmail(email);
 
         printf("DATA DIAGNOSTICO------------\n");
-        pegaData(dataDiagnostico);
+        pegaDataDiagnostico(dataDiagnostico);
 
         printf("Comorbidade:(se nao possui, aperte ENTER)\n");
         pegaComorbidade(comorbidade);
+//
+//        printf("ENDERECO------------\n");
+//        printf("Rua:\n");
+//        pegaRua(novoEndereco);
+//
+//        printf("Numero:\n");
+//        pegaNumero(novoEndereco);
+//
+//        printf("Bairro:\n");
+//        pegaBairro(novoEndereco);
+//
+//        printf("Cidade:\n");
+//        pegaCidade(novoEndereco);
+//
+//        printf("Estado:\n");
+//        pegaEstado(novoEndereco);
+//
+//        printf("Cep: (8 digitos, somente numeros)\n");
+//        pegaCep(novoEndereco);
 
-        printf("ENDERECO------------\n");
-        printf("Rua:\n");
-        pegaRua(novoEndereco);
+        guardarPaciente(nome, cpf, telefone, dataDeNascimento, email, dataDiagnostico, comorbidade);
 
-        printf("Numero:\n");
-        pegaNumero(novoEndereco);
-
-        printf("Bairro:\n");
-        pegaBairro(novoEndereco);
-
-        printf("Cidade:\n");
-        pegaCidade(novoEndereco);
-
-        printf("Estado:\n");
-        pegaEstado(novoEndereco);
-
-        printf("Cep: (8 digitos, somente numeros)\n");
-        pegaCep(novoEndereco);
-
-        printf("\nDeseja cadastrar dados do paciente?(s/n) ");
+        printf("\nDeseja cadastrar novo paciente?(s/n) ");
         scanf("%c", &desejaCadastrar);
         fflush(stdin);
     } while(desejaCadastrar == 's' || desejaCadastrar == 'S');
@@ -113,41 +116,72 @@ void pegaCpf(char cpf[]) {
         } else {
             validacao = 0;
         }
+
+      //  trim(cpf, NULL);
     }while(validacao);
 }
 
 void pegaTelefone(char telefone[]) {
     int validacao = 0;
     do{
-        fgets(telefone, 15, stdin);
+        fgets(telefone, 20, stdin);
         fflush(stdin);
 
         // Verifica o tamanho da string
-        if(strlen(telefone) != 14 && strlen(telefone) != 13){
-            printf("Numero de telefone ivalido. Tente novamente!\nTelefone (12 ou 13 digitos, apenas numeros):\n");
+        if(strlen(telefone) != 13 && strlen(telefone) != 12){
+            printf("Numero de telefone invalido. Tente novamente!\nTelefone (12 ou 13 digitos, apenas numeros):\n");
             validacao = 1;
         } else {
             validacao = 0;
         }
+
+        trim(telefone, NULL);
     }while(validacao);
 }
 
-void pegaData(int data[]) {
+void pegaDataDeNascimento(int dataDeNascimento[]) {
     int validacao = 0;
     do{ // Pega cada valor do ano
         printf("Dia: ");
-        scanf("%d", &data[0]);
+        scanf("%d", &dataDeNascimento[0]);
         fflush(stdin);
 
         printf("Mes: ");
-        scanf("%d", &data[1]);
+        scanf("%d", &dataDeNascimento[1]);
         fflush(stdin);
 
         printf("Ano: ");
-        scanf("%d", &data[2]);
+        scanf("%d", &dataDeNascimento[2]);
         fflush(stdin);
 
-        validacao = validaData(data);
+        validacao = validaData(dataDeNascimento);
+        if (validacao){
+            printf("\nData invalida, informe uma data existente.\n");
+            validacao = 1;
+        } else {
+            // Nothing to do;
+            validacao = 0;
+        }
+
+    }while(validacao);
+}
+
+void pegaDataDiagnostico(int dataDiagnostico[]) {
+    int validacao = 0;
+    do{ // Pega cada valor do ano
+        printf("Dia: ");
+        scanf("%d", &dataDiagnostico[0]);
+        fflush(stdin);
+
+        printf("Mes: ");
+        scanf("%d", &dataDiagnostico[1]);
+        fflush(stdin);
+
+        printf("Ano: ");
+        scanf("%d", &dataDiagnostico[2]);
+        fflush(stdin);
+
+        validacao = validaData(dataDiagnostico);
         if (validacao){
             printf("\nData invalida, informe uma data existente.\n");
             validacao = 1;
@@ -338,5 +372,42 @@ void pegaCep(struct Endereco *novoEndereco) {
         } else {
             validacao = 0;
         }
+
+        trim(novoEndereco->cep, NULL);
     }while(validacao);
+}
+
+void guardarPaciente(char *nome,
+                     char *cpf,
+                     char *telefone,
+                     int dataDeNascimento[],
+                     char *email,
+                     int dataDiagnostico[],
+                     char *comorbidade) {
+
+    FILE *pacienteFile;
+    pacienteFile = fopen("paciente.txt", "a+");
+
+    fprintf(pacienteFile, "%s|%s|%s|%d/%d/%d|%s|%d/%d/%d|%s\n",
+            nome,
+            cpf,
+            telefone,
+            dataDeNascimento[0],
+            dataDeNascimento[1],
+            dataDeNascimento[2],
+            email,
+            dataDiagnostico[0],
+            dataDiagnostico[1],
+            dataDiagnostico[2],
+            comorbidade);
+//            novoEndereco->rua,
+//            novoEndereco->numero,
+//            novoEndereco->bairro,
+//            novoEndereco->cidade,
+//            novoEndereco->estado,
+//            novoEndereco->cep);
+
+    printf("\nPaciente cadastrado com sucesso!\n");
+
+    fclose(pacienteFile);
 }
