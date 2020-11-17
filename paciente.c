@@ -38,40 +38,36 @@ void registrarPaciente()
     printf("Telefone (12 ou 13 digitos, apenas numeros):\n");
     pegaTelefone(telefone);
 
-    printf("Data de nascimento\n");
+    printf("DATA DE NASCIMENTO------------\n");
     pegaData(dataDeNascimento);
 
     printf("E-mail:\n");
     pegaEmail(email);
 
-    printf("Data do diagnostico\n");
+    printf("DATA DIAGNOSTICO------------\n");
     pegaData(dataDiagnostico);
 
     printf("Comorbidade:(se nao possui, aperte ENTER)\n");
     pegaComorbidade(comorbidade);
-    printf(comorbidade);
 
-    printf("Endereco------------\n");
+    printf("ENDERECO------------\n");
     printf("Rua:\n");
-    pegaRua();
+    pegaRua(novoEndereco);
 
-    printf("Numero:");
+    printf("Numero:\n");
+    pegaNumero(novoEndereco);
 
+    printf("Bairro:\n");
+    pegaBairro(novoEndereco);
 
-    printf("Rua:");
+    printf("Cidade:\n");
+    pegaCidade(novoEndereco);
 
+    printf("Estado:\n");
+    pegaEstado(novoEndereco);
 
-    printf("Bairro:");
-
-
-    printf("Cidade:");
-
-
-    printf("Estado:");
-
-
-    printf("Cep:");
-
+    printf("Cep:\n");
+    pegaCep(novoEndereco);
 
 
 }
@@ -211,7 +207,6 @@ void pegaEmail(char email[]){
             printf("Email invalido. Tente novamente!\nEmail:\n");
             validacao = 1;
         } else {
-            // Nada a fazer
             validacao = 0;
         }
 
@@ -221,6 +216,7 @@ void pegaEmail(char email[]){
 void pegaComorbidade(char comorbidade[]){
     fgets(comorbidade, 50, stdin);
     fflush(stdin);
+
     trim(comorbidade, NULL);
 
     if(strlen(comorbidade)<=1){
@@ -229,6 +225,110 @@ void pegaComorbidade(char comorbidade[]){
     converterMinusculo(comorbidade);
 }
 
-void pegaRua(){
+void pegaRua(struct Endereco *novoEndereco){
+    int validation = 0;
 
+    do{
+        fgets(novoEndereco->rua, 100, stdin);
+        fflush(stdin);
+
+        converterMinusculo(novoEndereco->rua);
+        trim(novoEndereco->rua, NULL);
+
+        validation = stringEhVazia(novoEndereco->rua);
+
+        if (validation){
+            printf("Campo vazio, informe uma rua valida.\nRua:\n");
+            validation = 1;
+        } else {
+            validation = 0;
+        }
+    }while(validation);
+}
+
+void pegaNumero(struct Endereco *novoEndereco){
+    int validation = 0;
+
+        scanf("%d", &novoEndereco->numero);
+        fflush(stdin);
+}
+
+void pegaBairro(struct Endereco *novoEndereco){
+    int validation = 0;
+
+    do{
+        fgets(novoEndereco->bairro, 100, stdin);
+        fflush(stdin);
+
+        converterMinusculo(novoEndereco->bairro);
+        trim(novoEndereco->bairro, NULL);
+
+        validation = stringEhVazia(novoEndereco->bairro);
+
+        if (validation){
+            printf("Campo vazio, informe um bairro valido.\nBairro:\n");
+            validation = 1;
+        } else {
+            validation = 0;
+        }
+    }while(validation);
+}
+
+void pegaCidade(struct Endereco *novoEndereco){
+    int validation = 0;
+
+    do{
+        fgets(novoEndereco->cidade, 100, stdin);
+        fflush(stdin);
+
+        converterMinusculo(novoEndereco->cidade);
+        trim(novoEndereco->cidade, NULL);
+
+        validation = stringEhVazia(novoEndereco->cidade);
+
+        if (validation){
+            printf("Campo vazio, informe uma cidade valida.\nCidade:\n");
+            validation = 1;
+        } else {
+            validation = 0;
+        }
+    }while(validation);
+}
+
+void pegaEstado(struct Endereco *novoEndereco){
+    int validation = 0;
+
+    do{
+        fgets(novoEndereco->estado, 100, stdin);
+        fflush(stdin);
+
+        converterMinusculo(novoEndereco->estado);
+        trim(novoEndereco->estado, NULL);
+
+        validation = stringEhVazia(novoEndereco->estado);
+
+        if (validation){
+            printf("Campo vazio, informe um estado valido.\nEstado:\n");
+            validation = 1;
+        } else {
+            validation = 0;
+        }
+    }while(validation);
+}
+
+void pegaCep(struct Endereco *novoEndereco) {
+    int validacao = 0;
+
+    do{
+        fgets(novoEndereco->cep, 10, stdin);
+        fflush(stdin);
+
+        // Verifica o tamanho da string
+        if(strlen(novoEndereco->cep) != 9){
+            printf("CEP invalido. Tente novamente!\nCEP (8 digitos, somente numeros):\n");
+            validacao = 1;
+        } else {
+            validacao = 0;
+        }
+    }while(validacao);
 }

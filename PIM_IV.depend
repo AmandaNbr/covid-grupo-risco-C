@@ -35,3 +35,28 @@
 1605568794 c:\users\allan nobre\desktop\projeto\pim_iv\utils.c
 	<string.h>
 
+1605568840 source:c:\users\allan nobre\desktop\covid-grupo-risco-c\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stddef.h>
+
+1605569648 source:c:\users\allan nobre\desktop\covid-grupo-risco-c\start.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stddef.h>
+
+1605582259 source:c:\users\allan nobre\desktop\covid-grupo-risco-c\utils.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stddef.h>
+	<time.h>
+
+1605591741 source:c:\users\allan nobre\desktop\covid-grupo-risco-c\paciente.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stddef.h>
+
