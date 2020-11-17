@@ -497,9 +497,9 @@ void guardarPacienteGrupoDeRisco(struct Endereco *novoEndereco,
             novoEndereco->cep,
             idade);
 
-    printf("\nPacientes do grupo de risco cadastrados com sucesso!\n");
-
     fclose(pacienteGrupoDeRiscoFile);
+
+    printf("\nPaciente(s) do grupo de risco cadastrado(s) com sucesso!\n");
 }
 
 void formatoArquivoPaciente(char *nome,
