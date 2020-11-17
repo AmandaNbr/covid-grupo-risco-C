@@ -22,8 +22,8 @@ void registrarPaciente()
 {
     char desejaCadastrar;
     char nome[100];
-    char cpf[20];
-    char telefone[9];
+    char cpf[13];
+    char telefone[13];
     int dataDeNascimento[3];
     char email[50];
     int dataDiagnostico[3];
@@ -40,7 +40,7 @@ void registrarPaciente()
         printf("Cpf (11 digitos, somente numeros):\n");
         pegaCpf(cpf);
 
-        printf("Telefone (12 ou 13 digitos, apenas numeros):\n");
+        printf("Telefone (10 ou 11 digitos, apenas numeros):\n");
         pegaTelefone(telefone);
 
         printf("DATA DE NASCIMENTO------------\n");
@@ -88,10 +88,10 @@ void registrarPaciente()
         fflush(stdin);
     } while(desejaCadastrar == 's' || desejaCadastrar == 'S');
 
-
+    validaPacienteGrupoDeRisco();
 }
 
-void pegaNome(char nome[100]) {
+void pegaNome(char *nome) {
     int validacao = 0;
     do{
         fgets(nome, 100, stdin);
@@ -110,21 +110,20 @@ void pegaNome(char nome[100]) {
     }while(validacao);
 }
 
-void pegaCpf(char *cpf) {
+void pegaCpf(char cpf[]) {
     int validacao = 0;
     do{
         fgets(cpf, 20, stdin);
         fflush(stdin);
+        trim(cpf, NULL);
 
         // Verifica o tamanho da string
-        if(strlen(cpf) != 12){
+        if(strlen(cpf) != 11){
             printf("Cpf invalido. Tente novamente!\nCpf (11 digitos, somente numeros):\n");
             validacao = 1;
         } else {
             validacao = 0;
         }
-
-        trim(cpf, NULL);
     }while(validacao);
 }
 
@@ -133,16 +132,15 @@ void pegaTelefone(char telefone[]) {
     do{
         fgets(telefone, 20, stdin);
         fflush(stdin);
+        trim(telefone, NULL);
 
         // Verifica o tamanho da string
-        if(strlen(telefone) != 13 && strlen(telefone) != 12){
-            printf("Numero de telefone invalido. Tente novamente!\nTelefone (11 ou 12 digitos, apenas numeros):\n");
+        if(strlen(telefone) != 10 && strlen(telefone) != 11){
+            printf("Numero de telefone invalido. Tente novamente!\nTelefone (10 ou 11 digitos, apenas numeros):\n");
             validacao = 1;
         } else {
             validacao = 0;
         }
-
-        trim(telefone, NULL);
     }while(validacao);
 }
 
@@ -413,4 +411,99 @@ void guardarPaciente(char *nome,
     printf("\nPaciente cadastrado com sucesso!\n");
 
     fclose(pacienteFile);
+}
+
+
+void validaPacienteGrupoDeRisco(){
+
+    int idade = 0;
+    char linha[256];
+    int achouPacienteGrupoDeRisco = 0;
+    char nome[100];
+    char cpf[13];
+    char telefone[13];
+    int dataDeNascimento[3];
+    char email[50];
+    int dataDiagnostico[3];
+    char comorbidade[50];
+    struct Endereco *lerEndereco;
+    lerEndereco = (struct Endereco*) malloc(sizeof(struct Endereco));
+
+    FILE *pacienteFile;
+    pacienteFile = fopen("paciente.txt", "r");
+
+    while(fgets(linha, sizeof(linha), pacienteFile) != NULL) {
+        formatoArquivoPaciente(nome,
+                               cpf,
+                               telefone,
+                               dataDeNascimento,
+                               email,
+                               dataDiagnostico,
+                               comorbidade,
+                               lerEndereco,
+                               linha);
+
+        idade = pegaIdade(dataDeNascimento);
+        // Se o paciente tiver alguma comorbidade e se o paciente tiver mais de 65 anos
+        if (strcmp(comorbidade, "nenhuma") != 0 || idade > 65) {
+            achouPacienteGrupoDeRisco = 1;
+            printf("\nPaciente ");
+            printf(nome);
+            printf(" pertence ao grupo de risco.\n");
+        }
+
+        if(achouPacienteGrupoDeRisco) {
+            guardarPacienteGrupoDeRisco(lerEndereco, pegaIdade(dataDeNascimento));
+        }
+
+    }
+
+    if (!achouPacienteGrupoDeRisco) {
+        printf("\nNão ha pacientes pertencentes ao grupo de risco.\n");
+    }
+    fclose(pacienteFile);
+}
+
+void guardarPacienteGrupoDeRisco(struct Endereco *novoEndereco,
+                                 int idade) {
+
+    FILE *pacienteGrupoDeRiscoFile;
+    pacienteGrupoDeRiscoFile = fopen("pacienteGrupoDeRisco.txt", "a+");
+
+    fprintf(pacienteGrupoDeRiscoFile, "%s|%d\n",
+            novoEndereco->cep,
+            idade);
+
+    printf("\nPacientes do grupo de risco cadastrados com sucesso!\n");
+
+    fclose(pacienteGrupoDeRiscoFile);
+}
+
+void formatoArquivoPaciente(char *nome,
+                            char *cpf,
+                            char *telefone,
+                            int dataDeNascimento[],
+                            char *email,
+                            int dataDiagnostico[],
+                            char *comorbidade,
+                            struct Endereco *lerEndereco,
+                            char *linha){
+    sscanf(linha, "%[^|]|%[^|]|%[^|]|%d/%d/%d|%[^|]|%d/%d/%d|%[^|]|%[^|]|%d|%[^|]|%[^|]|%[^|]|%[^\n]\n",
+            nome,
+            cpf,
+            telefone,
+            &dataDeNascimento[0],
+            &dataDeNascimento[1],
+            &dataDeNascimento[2],
+            email,
+            &dataDiagnostico[0],
+            &dataDiagnostico[1],
+            &dataDiagnostico[2],
+            comorbidade,
+            lerEndereco->rua,
+            &lerEndereco->numero,
+            lerEndereco->bairro,
+            lerEndereco->cidade,
+            lerEndereco->estado,
+            lerEndereco->cep);
 }
