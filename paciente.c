@@ -3,9 +3,28 @@
 #include <string.h>
 #include <stddef.h>
 
-//void registrarPaciente();
-void pegaNome(char nome[100]);
-
+void registrarPaciente();
+void pegaNome(char nome[]);
+void pegaCpf(char cpf[]);
+void pegaTelefone(char telefone[]);
+void pegaDataDeNascimento(int dataDeNascimento[]);
+void pegaDataDiagnostico(int dataDiagnostico[]);
+int validaData(int data[]);
+void pegaEmail(char email[]);
+void pegaComorbidade(char comorbidade[]);
+void pegaRua();
+void pegaNumero();
+void pegaBairro();
+void pegaCidade();
+void pegaEstado();
+void pegaCep();
+void guardarPaciente();
+void validaPacienteGrupoDeRisco();
+void trim();
+int stringEhVazia();
+void formatoArquivoPaciente();
+int pegaIdade();
+void guardarPacienteGrupoDeRisco();
 
 struct Endereco {
     char rua[50];
@@ -15,8 +34,6 @@ struct Endereco {
     char estado[50];
     char cep[10];
 };
-
-
 
 void registrarPaciente()
 {
@@ -52,7 +69,7 @@ void registrarPaciente()
         printf("DATA DIAGNOSTICO------------\n");
         pegaDataDiagnostico(dataDiagnostico);
 
-        printf("Comorbidade:(se nao possui, aperte ENTER)\n");
+        printf("Comorbidade (se nao possui, aperte ENTER):\n");
         pegaComorbidade(comorbidade);
 
         printf("ENDERECO------------\n");
@@ -71,9 +88,10 @@ void registrarPaciente()
         printf("Estado:\n");
         pegaEstado(novoEndereco);
 
-        printf("Cep: (8 digitos, somente numeros)\n");
+        printf("Cep (8 digitos, somente numeros): \n");
         pegaCep(novoEndereco);
 
+        // Chama a funcao para guardar o paciente no arquivo
         guardarPaciente(nome,
                         cpf,
                         telefone,
@@ -86,12 +104,17 @@ void registrarPaciente()
         printf("\nDeseja cadastrar novo paciente?(s/n) ");
         scanf("%c", &desejaCadastrar);
         fflush(stdin);
+
+        system("cls");
     } while(desejaCadastrar == 's' || desejaCadastrar == 'S');
 
+    system("cls");
+
+    // Valida se existem pacientes do grupo de risco e guarda o CEP e idade em arquivo
     validaPacienteGrupoDeRisco();
 }
 
-void pegaNome(char *nome) {
+void pegaNome(char nome[]) {
     int validacao = 0;
     do{
         fgets(nome, 100, stdin);
@@ -102,7 +125,7 @@ void pegaNome(char *nome) {
         validacao = stringEhVazia(nome);
 
         if (validacao){
-            printf("Nome nulo, informe um nome valido.\nNome:\n");
+            printf("Nome nulo. Tente novamente!\nNome:\n");
         } else {
             // Nada a fazer
         }
@@ -115,6 +138,7 @@ void pegaCpf(char cpf[]) {
     do{
         fgets(cpf, 20, stdin);
         fflush(stdin);
+
         trim(cpf, NULL);
 
         // Verifica o tamanho da string
@@ -132,6 +156,7 @@ void pegaTelefone(char telefone[]) {
     do{
         fgets(telefone, 20, stdin);
         fflush(stdin);
+
         trim(telefone, NULL);
 
         // Verifica o tamanho da string
@@ -161,7 +186,7 @@ void pegaDataDeNascimento(int dataDeNascimento[]) {
 
         validacao = validaData(dataDeNascimento);
         if (validacao){
-            printf("\nData invalida, informe uma data existente.\n");
+            printf("Data invalida, informe uma data existente. Tente novamente!\n");
             validacao = 1;
         } else {
             // Nothing to do;
@@ -188,7 +213,7 @@ void pegaDataDiagnostico(int dataDiagnostico[]) {
 
         validacao = validaData(dataDiagnostico);
         if (validacao){
-            printf("\nData invalida, informe uma data existente.\n");
+            printf("Data invalida, informe uma data existente. Tente novamente!\n");
             validacao = 1;
         } else {
             // Nothing to do;
@@ -283,7 +308,7 @@ void pegaRua(struct Endereco *novoEndereco){
         validation = stringEhVazia(novoEndereco->rua);
 
         if (validation){
-            printf("Campo vazio, informe uma rua valida.\nRua:\n");
+            printf("Campo vazio. Tente novamente!\nRua:\n");
             validation = 1;
         } else {
             validation = 0;
@@ -292,8 +317,6 @@ void pegaRua(struct Endereco *novoEndereco){
 }
 
 void pegaNumero(struct Endereco *novoEndereco){
-    int validation = 0;
-
         scanf("%d", &novoEndereco->numero);
         fflush(stdin);
 }
@@ -310,7 +333,7 @@ void pegaBairro(struct Endereco *novoEndereco){
         validation = stringEhVazia(novoEndereco->bairro);
 
         if (validation){
-            printf("Campo vazio, informe um bairro valido.\nBairro:\n");
+            printf("Campo vazio. Tente novamente!\nBairro:\n");
             validation = 1;
         } else {
             validation = 0;
@@ -330,7 +353,7 @@ void pegaCidade(struct Endereco *novoEndereco){
         validation = stringEhVazia(novoEndereco->cidade);
 
         if (validation){
-            printf("Campo vazio, informe uma cidade valida.\nCidade:\n");
+            printf("Campo vazio. Tente novamente!\nCidade:\n");
             validation = 1;
         } else {
             validation = 0;
@@ -350,7 +373,7 @@ void pegaEstado(struct Endereco *novoEndereco){
         validation = stringEhVazia(novoEndereco->estado);
 
         if (validation){
-            printf("Campo vazio, informe um estado valido.\nEstado:\n");
+            printf("Campo vazio. Tente novamente!\nEstado:\n");
             validation = 1;
         } else {
             validation = 0;

@@ -15,27 +15,29 @@ void start()
 
     printf("\nBem vindo ao software de cadastro de pacientes!\n");
 
-//    do {
-//        printf("\nNome de usuario: ");
-//        scanf("%s", usuario);
-//        fflush(stdin);
-//        if (strcmp(usuarioPadrao, usuario) != 0){
-//          printf("Usuario invalido. Tente novamente!\n");
-//        } else {
-//        // Nada a fazer
-//        }
-//    } while ((strcmp(usuarioPadrao, usuario) != 0));
-//
-//    do {
-//        printf("Senha: ");
-//        scanf("%s", senha);
-//        fflush(stdin);
-//        if (strcmp(senhaPadrao, senha) != 0){
-//          printf("Senha invalida. Tente novamente!\n");
-//        } else {
-//        // Nada a fazer
-//        }
-//    } while ((strcmp(senhaPadrao, senha) != 0));
+    // Valida o nome de usuario
+    do {
+        printf("\nNome de usuario: ");
+        scanf("%s", usuario);
+        fflush(stdin);
+        if (strcmp(usuarioPadrao, usuario) != 0){
+          printf("Usuario invalido. Tente novamente!\n");
+        } else {
+        // Nada a fazer
+        }
+    } while ((strcmp(usuarioPadrao, usuario) != 0));
+
+    // Valida a senha
+    do {
+        printf("Senha: ");
+        scanf("%s", senha);
+        fflush(stdin);
+        if (strcmp(senhaPadrao, senha) != 0){
+          printf("Senha invalida. Tente novamente!\n");
+        } else {
+        // Nada a fazer
+        }
+    } while ((strcmp(senhaPadrao, senha) != 0));
 
     system("cls");
     registrarPaciente();
