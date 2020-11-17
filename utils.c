@@ -10,18 +10,6 @@ char *rtrim(char *str, const char *seps);
 void trim(char *str, const char *seps);
 int stringEhVazia(char *stringChecada);
 
-// Converte para minusculo
-void converterMinusculo(char texto[]) {
-   int c = 0;
-
-   while (texto[c] != '\0') {
-      if (texto[c] >= 'A' && texto[c] <= 'Z') {
-         texto[c] = texto[c] + 32;
-      }
-      c++;
-   }
-}
-
 // Remove os caracteres do lado esquerdo da string e realoca
 char *ltrim(char *str, const char *seps) {
     size_t totrim;

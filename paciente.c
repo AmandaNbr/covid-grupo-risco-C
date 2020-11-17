@@ -22,16 +22,16 @@ void registrarPaciente()
 {
     char desejaCadastrar;
     char nome[100];
-    char cpf[13];
+    char cpf[20];
     char telefone[9];
     int dataDeNascimento[3];
     char email[50];
     int dataDiagnostico[3];
     char comorbidade[50];
     struct Endereco *novoEndereco;
+    novoEndereco = (struct Endereco*) malloc(sizeof(struct Endereco));
 
     do{
-        novoEndereco = (struct Endereco*) malloc(sizeof(struct Endereco));
         printf("\nInforme os dados do paciente.\n");
 
         printf("Nome:\n");
@@ -54,32 +54,40 @@ void registrarPaciente()
 
         printf("Comorbidade:(se nao possui, aperte ENTER)\n");
         pegaComorbidade(comorbidade);
-//
-//        printf("ENDERECO------------\n");
-//        printf("Rua:\n");
-//        pegaRua(novoEndereco);
-//
-//        printf("Numero:\n");
-//        pegaNumero(novoEndereco);
-//
-//        printf("Bairro:\n");
-//        pegaBairro(novoEndereco);
-//
-//        printf("Cidade:\n");
-//        pegaCidade(novoEndereco);
-//
-//        printf("Estado:\n");
-//        pegaEstado(novoEndereco);
-//
-//        printf("Cep: (8 digitos, somente numeros)\n");
-//        pegaCep(novoEndereco);
 
-        guardarPaciente(nome, cpf, telefone, dataDeNascimento, email, dataDiagnostico, comorbidade);
+        printf("ENDERECO------------\n");
+        printf("Rua:\n");
+        pegaRua(novoEndereco);
+
+        printf("Numero:\n");
+        pegaNumero(novoEndereco);
+
+        printf("Bairro:\n");
+        pegaBairro(novoEndereco);
+
+        printf("Cidade:\n");
+        pegaCidade(novoEndereco);
+
+        printf("Estado:\n");
+        pegaEstado(novoEndereco);
+
+        printf("Cep: (8 digitos, somente numeros)\n");
+        pegaCep(novoEndereco);
+
+        guardarPaciente(nome,
+                        cpf,
+                        telefone,
+                        dataDeNascimento,
+                        email,
+                        dataDiagnostico,
+                        comorbidade,
+                        novoEndereco);
 
         printf("\nDeseja cadastrar novo paciente?(s/n) ");
         scanf("%c", &desejaCadastrar);
         fflush(stdin);
     } while(desejaCadastrar == 's' || desejaCadastrar == 'S');
+
 
 }
 
@@ -89,7 +97,6 @@ void pegaNome(char nome[100]) {
         fgets(nome, 100, stdin);
         fflush(stdin);
 
-        converterMinusculo(nome);
         trim(nome, NULL);
 
         validacao = stringEhVazia(nome);
@@ -103,7 +110,7 @@ void pegaNome(char nome[100]) {
     }while(validacao);
 }
 
-void pegaCpf(char cpf[]) {
+void pegaCpf(char *cpf) {
     int validacao = 0;
     do{
         fgets(cpf, 20, stdin);
@@ -117,7 +124,7 @@ void pegaCpf(char cpf[]) {
             validacao = 0;
         }
 
-      //  trim(cpf, NULL);
+        trim(cpf, NULL);
     }while(validacao);
 }
 
@@ -129,7 +136,7 @@ void pegaTelefone(char telefone[]) {
 
         // Verifica o tamanho da string
         if(strlen(telefone) != 13 && strlen(telefone) != 12){
-            printf("Numero de telefone invalido. Tente novamente!\nTelefone (12 ou 13 digitos, apenas numeros):\n");
+            printf("Numero de telefone invalido. Tente novamente!\nTelefone (11 ou 12 digitos, apenas numeros):\n");
             validacao = 1;
         } else {
             validacao = 0;
@@ -264,7 +271,6 @@ void pegaComorbidade(char comorbidade[]){
     if(strlen(comorbidade)<=1){
         strcpy(comorbidade, "nenhuma");
     }
-    converterMinusculo(comorbidade);
 }
 
 void pegaRua(struct Endereco *novoEndereco){
@@ -274,7 +280,6 @@ void pegaRua(struct Endereco *novoEndereco){
         fgets(novoEndereco->rua, 100, stdin);
         fflush(stdin);
 
-        converterMinusculo(novoEndereco->rua);
         trim(novoEndereco->rua, NULL);
 
         validation = stringEhVazia(novoEndereco->rua);
@@ -302,7 +307,6 @@ void pegaBairro(struct Endereco *novoEndereco){
         fgets(novoEndereco->bairro, 100, stdin);
         fflush(stdin);
 
-        converterMinusculo(novoEndereco->bairro);
         trim(novoEndereco->bairro, NULL);
 
         validation = stringEhVazia(novoEndereco->bairro);
@@ -323,7 +327,6 @@ void pegaCidade(struct Endereco *novoEndereco){
         fgets(novoEndereco->cidade, 100, stdin);
         fflush(stdin);
 
-        converterMinusculo(novoEndereco->cidade);
         trim(novoEndereco->cidade, NULL);
 
         validation = stringEhVazia(novoEndereco->cidade);
@@ -344,7 +347,6 @@ void pegaEstado(struct Endereco *novoEndereco){
         fgets(novoEndereco->estado, 100, stdin);
         fflush(stdin);
 
-        converterMinusculo(novoEndereco->estado);
         trim(novoEndereco->estado, NULL);
 
         validation = stringEhVazia(novoEndereco->estado);
@@ -383,12 +385,13 @@ void guardarPaciente(char *nome,
                      int dataDeNascimento[],
                      char *email,
                      int dataDiagnostico[],
-                     char *comorbidade) {
+                     char *comorbidade,
+                     struct Endereco *novoEndereco) {
 
     FILE *pacienteFile;
     pacienteFile = fopen("paciente.txt", "a+");
 
-    fprintf(pacienteFile, "%s|%s|%s|%d/%d/%d|%s|%d/%d/%d|%s\n",
+    fprintf(pacienteFile, "%s|%s|%s|%d/%d/%d|%s|%d/%d/%d|%s|%s|%d|%s|%s|%s|%s\n",
             nome,
             cpf,
             telefone,
@@ -399,13 +402,13 @@ void guardarPaciente(char *nome,
             dataDiagnostico[0],
             dataDiagnostico[1],
             dataDiagnostico[2],
-            comorbidade);
-//            novoEndereco->rua,
-//            novoEndereco->numero,
-//            novoEndereco->bairro,
-//            novoEndereco->cidade,
-//            novoEndereco->estado,
-//            novoEndereco->cep);
+            comorbidade,
+            novoEndereco->rua,
+            novoEndereco->numero,
+            novoEndereco->bairro,
+            novoEndereco->cidade,
+            novoEndereco->estado,
+            novoEndereco->cep);
 
     printf("\nPaciente cadastrado com sucesso!\n");
 
