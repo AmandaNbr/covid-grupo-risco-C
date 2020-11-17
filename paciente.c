@@ -477,6 +477,7 @@ void validaPacienteGrupoDeRisco(){
 
         if(achouPacienteGrupoDeRisco) {
             guardarPacienteGrupoDeRisco(lerEndereco, pegaIdade(dataDeNascimento));
+
         }
 
     }
@@ -485,6 +486,8 @@ void validaPacienteGrupoDeRisco(){
         printf("\nNão ha pacientes pertencentes ao grupo de risco.\n");
     }
     fclose(pacienteFile);
+
+            printf("\nPaciente(s) do grupo de risco cadastrado(s) com sucesso!\n");
 }
 
 void guardarPacienteGrupoDeRisco(struct Endereco *novoEndereco,
@@ -498,8 +501,6 @@ void guardarPacienteGrupoDeRisco(struct Endereco *novoEndereco,
             idade);
 
     fclose(pacienteGrupoDeRiscoFile);
-
-    printf("\nPaciente(s) do grupo de risco cadastrado(s) com sucesso!\n");
 }
 
 void formatoArquivoPaciente(char *nome,
