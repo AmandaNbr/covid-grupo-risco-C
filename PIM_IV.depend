@@ -1,0 +1,37 @@
+# depslib dependency file v1.0
+1605568840 source:c:\users\allan nobre\desktop\projeto\pim_iv\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stddef.h>
+
+1605569648 source:c:\users\allan nobre\desktop\projeto\pim_iv\start.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stddef.h>
+
+1605588315 source:c:\users\allan nobre\desktop\projeto\pim_iv\paciente.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stddef.h>
+
+1605582259 source:c:\users\allan nobre\desktop\projeto\pim_iv\utils.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stddef.h>
+	<time.h>
+
+1605568735 c:\users\allan nobre\desktop\projeto\pim_iv\start.c
+
+1605568831 c:\users\allan nobre\desktop\projeto\pim_iv\paciente.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stddef.h>
+
+1605568794 c:\users\allan nobre\desktop\projeto\pim_iv\utils.c
+	<string.h>
+
